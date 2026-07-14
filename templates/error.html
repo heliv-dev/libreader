@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        body {
+            padding-top: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+        }
+        article {
+            border-top: 4px solid #d93526;
+            width: 100%;
+        }
+        .actions { display: flex; gap: 1rem; margin-top: 1.5rem; }
+        .actions button, .actions a { margin: 0; flex: 1; text-align: center; }
+    </style>
+</head>
+<body>
+
+<main class="container" style="max-width: 500px;">
+    <article>
+        <header>
+            <h3 style="margin: 0; color: #d93526;">⚠️ Access Restricted</h3>
+        </header>
+
+        <p style="font-size: 1.1rem; margin: 1rem 0;">
+            {{.error}}
+        </p>
+
+        <footer>
+            <div class="actions">
+                <button onclick="history.back()" class="outline secondary">Назад</button>
+                <a href="/" class="button primary">В библиотеку</a>
+            </div>
+        </footer>
+    </article>
+</main>
+
+<script>
+    // Automatically apply the theme (light/dark) from the reader settings.
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+</script>
+
+</body>
+</html>

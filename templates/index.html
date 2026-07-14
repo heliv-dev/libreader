@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .title }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+
+        body { padding-top: 2rem; }
+        .book-actions a { margin-left: 10px; font-size: 0.9rem; }
+        .error-msg { color: #d32f2f; background: #ffebee; padding: 10px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<main class="container">
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1><a href="/" style="text-decoration: none; color: inherit;">📚 {{ .title }}</a></h1>
+        <a href="/add_books" class="button">Добавить книгу</a>
+    </header>
+
+    {{ if .error }}
+    <p class="error-msg">⚠️ {{ .error }}</p>
+    {{ end }}
+
+    <section>
+        <h2>Список книг</h2>
+
+        {{ if not .books }}
+        <p>В библиотеке пока нет книг. Нажмите кнопку выше, чтобы добавить первую!</p>
+        {{ else }}
+        <ul>
+            {{ range .books }}
+            <li style="list-style-type: none; border-bottom: 1px solid var(--muted-border-color); padding: 0.5rem 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>{{.Title}}</strong> — <em>{{.Author}}</em> ({{.Year}})
+                        <br>
+                        <small>Жанр: <a href="/genre/{{.Genre}}" class="secondary">{{.Genre}}</a></small>
+                    </div>
+                    <div class="book-actions">
+                        <a href="/read_book/{{.ID}}" role="button" class="outline contrast">Читать</a>
+                        <a href="/delete_books/{{.ID}}" role="button" class="outline delete-btn" style="--background-color: #d32f2f; --border-color: #d32f2f; color: #d32f2f;">Удалить</a>
+                    </div>
+                </div>
+            </li>
+            {{ end }}
+        </ul>
+        {{ end }}
+    </section>
+</main>
+
+</body>
+</html>

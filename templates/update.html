@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }} — Редактирование</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        body { padding-top: 2rem; }
+        textarea { resize: vertical; }
+        .genre-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
+        .genre-tag { cursor: pointer; background: var(--contrast-inverse); color: var(--contrast); padding: 5px 10px; border-radius: 15px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+<main class="container" style="max-width: 800px;">
+
+    <header>
+        <a href="/read_book/{{ .BookID }}" class="secondary" style="font-size: 0.9rem; text-decoration: none;">← Назад к чтению</a>
+        <h1 style="margin-top: 0.5rem;">📖 {{ .TitleForm }}</h1>
+    </header>
+
+    <section>
+        <article>
+            <form action="/update_books/{{ .BookID }}" method="post">
+
+                <label for="title">
+                    Название книги:
+                    <input type="text" id="title" name="title" value="{{ .Title }}" required>
+                </label>
+
+                <label for="author">
+                    Автор:
+                    <input type="text" id="author" name="author" value="{{ .Author }}">
+                </label>
+
+                <div class="grid">
+                    <label for="year">
+                        Год издания:
+                        <input type="number" id="year" name="year" value="{{ .Year }}">
+                    </label>
+
+                    <label for="genre">
+                        Жанр:
+                        <input type="text" id="genre" name="genre" value="{{ .Genre }}">
+                    </label>
+                </div>
+
+                <div>
+                    <small>Или выберите из популярных:</small>
+                    <div class="genre-tags">
+                        {{ range .Genres }}
+                        <span class="genre-tag">{{ . }}</span>
+                        {{ end }}
+                    </div>
+                </div>
+
+                <label for="content">
+                    Текст книги:
+                    <textarea id="content" name="content" rows="15" placeholder="Введите текст книги..." required>{{ .Content }}</textarea>
+                </label>
+
+                <fieldset role="group" style="margin-top: 1.5rem;">
+                    <a href="/read_book/{{ .BookID }}" role="button" class="secondary">Отмена</a>
+                    <button type="submit" class="primary">Сохранить изменения</button>
+                </fieldset>
+
+            </form>
+        </article>
+    </section>
+
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const genreInput = document.getElementById('genre');
+        const tags = document.querySelectorAll('.genre-tag');
+
+        tags.forEach(tag => {
+            tag.addEventListener('click', function () {
+                genreInput.value = this.textContent;
+            });
+        });
+
+        // Automatically apply the theme (light/dark) from the reader settings.
+        const htmlElement = document.documentElement;
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', savedTheme);
+    });
+</script>
+
+</body>
+</html>

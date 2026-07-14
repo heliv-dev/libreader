@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .TitleForm }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        body { padding-top: 2rem; }
+        .form-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; }
+        .genre-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
+        .genre-tag { cursor: pointer; background: var(--contrast-inverse); color: var(--contrast); padding: 5px 10px; border-radius: 15px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+<main class="container" style="max-width: 700px;">
+    <header>
+        <a href="/" class="secondary" style="font-size: 0.9rem; text-decoration: none;">← Назад к списку</a>
+        <h1 style="margin-top: 0.5rem;">{{ .TitleForm }}</h1>
+    </header>
+
+    <form action="" method="POST">
+
+        <input type="hidden" name="id" value="{{ .ID }}">
+
+        <label for="title">Название книги
+            <input type="text" id="title" name="title" value="{{.title}}" required>
+        </label>
+
+        <label for="author">Автор
+            <input type="text" id="author" name="author" value="{{.author}}" required>
+        </label>
+
+        <div class="grid">
+            <label for="year">Год издания
+                <input type="number" id="year" name="year" value="{{.year}}" required>
+            </label>
+
+            <label for="genre">Жанр
+                <input type="text" id="genre" name="genre" value="{{.genre}}" required>
+            </label>
+        </div>
+
+        <div>
+            <small>Или выберите из популярных:</small>
+            <div class="genre-tags">
+                {{ range .Genres }}
+                <span class="genre-tag">{{ . }}</span>
+                {{ end }}
+            </div>
+        </div>
+
+        <label for="content">Текст книги
+            <textarea id="content" name="content" rows="10" placeholder="Введите или отредактируйте текст книги...">{{.content}}</textarea>
+        </label>
+
+        <fieldset class="form-actions">
+            <a href="/" role="button" class="outline secondary">Отмена</a>
+            <button type="submit">Сохранить изменения</button>
+        </fieldset>
+
+    </form>
+</main>
+
+</body>
+</html>

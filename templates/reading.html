@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        body { padding-top: 2rem; }
+
+        #textContainer {
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid var(--muted-border-color);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+        .reader-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .reader-controls button, .reader-controls input {
+            margin: 0;
+            width: auto;
+        }
+        .nav-links { display: flex; gap: 1rem; margin-top: 1.5rem; }
+    </style>
+</head>
+<body>
+
+<main class="container" style="max-width: 800px;">
+
+    <header>
+        <a href="/" class="secondary" style="font-size: 0.9rem; text-decoration: none;">← Назад в библиотеку</a>
+        <h1 style="margin-top: 0.5rem;">📖 {{ .Title }}</h1>
+    </header>
+
+    <section class="reader-controls">
+        <button id="increaseFont" class="outline secondary" title="Увеличить шрифт">А+</button>
+        <button id="decreaseFont" class="outline secondary" title="Уменьшить шрифт">А-</button>
+        <button id="themeToggleButton" class="outline contrast">Тёмная тема</button>
+    </section>
+
+    <section id="textContainer">
+        {{ range .Paragraphs }}
+        <p>{{ . }}</p>
+        {{ else }}
+        <p style="color: var(--muted-color); text-align: center; font-style: italic;">
+            У этой книги пока нет содержимого. Используйте форму ниже, чтобы добавить текст.
+        </p>
+        {{ end }}
+    </section>
+
+    {{ if .AllowEditing }}
+    <section>
+        <article>
+            <h5 style="margin-bottom: 1rem;">Добавить текст к книге</h5>
+            <form action="/add_text/{{ .BookID }}" method="POST">
+                <label for="new_content">
+                    <textarea id="new_content" name="add_text" rows="6" placeholder="Введите или вставьте текст книги сюда..." required></textarea>
+                </label>
+                <button type="submit" class="primary">Сохранить текст</button>
+            </form>
+        </article>
+    </section>
+
+    <footer class="nav-links">
+        <a href="/update_books/{{ .BookID }}" class="secondary" style="font-size: 0.9rem;">Редактировать книгу</a>
+    </footer>
+    {{ end }}
+</main>
+
+<script>
+    const increaseFont = document.getElementById('increaseFont');
+    const decreaseFont = document.getElementById('decreaseFont');
+    const themeToggleButton = document.getElementById('themeToggleButton');
+    const textContainer = document.getElementById('textContainer');
+    const htmlElement = document.documentElement;
+
+    let fontSize = 18;
+
+    // Increase font size.
+    increaseFont.addEventListener('click', () => {
+        fontSize += 2;
+        textContainer.style.fontSize = fontSize + 'px';
+    });
+
+    // Decrease font size.
+    decreaseFont.addEventListener('click', () => {
+        if (fontSize > 12) { // Prevent font size from becoming too small.
+            fontSize -= 2;
+            textContainer.style.fontSize = fontSize + 'px';
+        }
+    });
+
+    // Toggle between light and dark themes.
+    themeToggleButton.addEventListener('click', () => {
+        const currentTheme = htmlElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        htmlElement.setAttribute('data-theme', newTheme);
+    });
+</script>
+
+</body>
+</html>
